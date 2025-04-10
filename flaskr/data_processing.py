@@ -6,9 +6,9 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from llama_index.core import Document, VectorStoreIndex
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from .config import DOCUMENT_ID, SCOPES
 
-def get_document_text() -> Optional[List[Document]]:
+
+def get_document_text(document_id, scopes) -> Optional[List[Document]]:
     """
     Retrieves Q&A pairs from a Google Doc via the Google Docs API and returns them
     as a list of Document objects, each containing one Q&A pair.
@@ -17,25 +17,26 @@ def get_document_text() -> Optional[List[Document]]:
         Optional[List[Document]]: A list of Document objects with Q&A text,
                                   or None if DOCUMENT_ID is not set or retrieval fails.
     """
-    if not DOCUMENT_ID:
+
+    if not document_id:
         print("❌ Error: DOCUMENT_ID not set.")
         return None
 
     creds = None
     if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        creds = Credentials.from_authorized_user_file('token.json', scopes)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', scopes)
             creds = flow.run_local_server(port=0)
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
 
     service = build('docs', 'v1', credentials=creds)
-    document_data = service.documents().get(documentId=DOCUMENT_ID).execute()
+    document_data = service.documents().get(documentId=document_id).execute()
 
     print(f"📄 Document title: {document_data.get('title')}")
     full_text = ''
@@ -65,6 +66,7 @@ def get_document_text() -> Optional[List[Document]]:
         return None
 
     return documents
+
 
 def create_index(documents: List[Document]) -> VectorStoreIndex:
     """

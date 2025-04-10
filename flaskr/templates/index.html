@@ -8,6 +8,13 @@
 </head>
 <body>
   <div class="chat-wrapper">
+
+    <!-- 📄 Top-right icon to go to /database -->
+    <div class="top-right-nav">
+      <a href="{{ url_for('database.show_database') }}" class="nav-icon" title="문서 보기">📄</a>
+    </div>
+
+    <!-- Chatbot form -->
     <form method="POST" class="chat-form">
       <input
         type="text"
