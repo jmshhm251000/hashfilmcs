@@ -6,7 +6,7 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from llama_index.core import Document, VectorStoreIndex
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from config import DOCUMENT_ID, SCOPES
+from .config import DOCUMENT_ID, SCOPES
 
 def get_document_text() -> Optional[List[Document]]:
     """
@@ -78,4 +78,5 @@ def create_index(documents: List[Document]) -> VectorStoreIndex:
     """
     embed_model = HuggingFaceEmbedding(model_name="jhgan/ko-sbert-nli")
     index = VectorStoreIndex.from_documents(documents, embed_model=embed_model)
+    
     return index

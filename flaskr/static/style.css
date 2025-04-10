@@ -1,0 +1,214 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Apple SD Gothic Neo', sans-serif;
+  background-color: #cccaf8;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-wrapper {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 16px; /* Mobile spacing */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+  padding: 18px 24px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.chat-form input[type="text"] {
+  flex-grow: 1;              /* 👈 key line */
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 12px 16px;
+  background: transparent;
+  color: #333;
+}
+
+.chat-form button {
+  flex-shrink: 0;            /* 👈 prevents button from shrinking */
+  padding: 10px 20px;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chat-form button:hover {
+  background-color: #4338ca;
+}
+
+.chat-response {
+  width: 100%;
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  word-break: break-word;  /* 👈 prevents long text from overflowing */
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  background: #ffecec;
+  border-radius: 12px;
+  padding: 10px;
+}
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.login-form {
+  background-color: #b3b2f5;
+  padding: 20px 24px;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+.login-form input {
+  border: 1px solid #ddd;
+  padding: 12px 18px;
+  border-radius: 999px;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+  color: #333;
+}
+
+.login-form button {
+  padding: 12px 22px;
+  border: none;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border-radius: 999px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.login-form button:hover {
+  background-color: #4338ca;
+}
+
+
+/* Access Key Login Page */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #cccaf8;
+  width: 100%;
+}
+
+.login-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background-color: white;
+  padding: 20px 24px;
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  width: 90%;
+}
+
+.login-form input {
+  border: 1px solid #ddd;
+  padding: 12px 18px;
+  border-radius: 999px;
+  outline: none;
+  font-size: 16px;
+  width: 100%;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.login-form input:focus {
+  border-color: #4f46e5;
+}
+
+.login-form button {
+  padding: 12px 24px;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.login-form button:hover {
+  background-color: #4338ca;
+}
+
+/* Popup Error Modal */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-box {
+  background-color: white;
+  padding: 24px 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+}
+
+.popup-box button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  border: none;
+  background-color: #4f46e5;
+  color: white;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.popup-box button:hover {
+  background-color: #4338ca;
+}
