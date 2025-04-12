@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, session
-from .data_processing import create_index, get_document_text
 from .chatbot import Chatbot
 from .mongodb import mongo
 from .config import load_app_config
@@ -35,8 +34,8 @@ def create_app(test_config=None):
                     if chatbot is None:
                         document_id = app.config['DOCUMENT_ID']
                         scopes = app.config['SCOPES']
-                        index = create_index(get_document_text(document_id,scopes))
-                        chatbot = Chatbot(index, "deepseek-r1:8b")
+                        #index = create_index(get_document_text(document_id,scopes))
+                        chatbot = Chatbot("deepseek-r1:8b", document_id, scopes)
                     response = chatbot._query(user_message)
 
             return render_template("index.html", response=response, error=error)

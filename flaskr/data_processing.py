@@ -1,11 +1,11 @@
 import os
+import re
 from typing import Optional, List
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from llama_index.core import Document, VectorStoreIndex
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 
 def get_document_text(document_id, scopes) -> Optional[List[Document]]:
@@ -37,8 +37,8 @@ def get_document_text(document_id, scopes) -> Optional[List[Document]]:
 
     service = build('docs', 'v1', credentials=creds)
     document_data = service.documents().get(documentId=document_id).execute()
+    #print(f"📄 Document title: {document_data.get('title')}")
 
-    print(f"📄 Document title: {document_data.get('title')}")
     full_text = ''
     for element in document_data.get('body', {}).get('content', []):
         if 'paragraph' in element:
@@ -47,38 +47,18 @@ def get_document_text(document_id, scopes) -> Optional[List[Document]]:
                     content = run['textRun'].get('content', '')
                     full_text += content
 
-    # Split by "Q:" blocks
-    raw_pairs = full_text.split('Q:')
+    # Use regex to extract Q&A pairs robustly
     documents = []
-
-    for block in raw_pairs:
-        if 'A:' in block:
-            question_part, answer_part = block.split('A:', 1)
-            question = question_part.strip()
-            answer = answer_part.strip()
-
-            if question and answer:
-                text = f"Q: {question}\nA: {answer}"
-                documents.append(Document(text=text))
-
+    qa_matches = re.findall(r"Q:(.*?)A:(.*?)(?=(?:Q:|$))", full_text, re.DOTALL)
+    for question, answer in qa_matches:
+        question = question.strip()
+        answer = answer.strip()
+        if question and answer:
+            text = f"Q: {question}\nA: {answer}"
+            documents.append(Document(text=text))
+    
     if not documents:
         print("⚠️ No Q&A pairs found in the document.")
         return None
 
     return documents
-
-
-def create_index(documents: List[Document]) -> VectorStoreIndex:
-    """
-    Creates a VectorStoreIndex from a list of Documents using the jhgan/ko-sbert-nli embedding model.
-
-    Args:
-        documents (List[Document]): A list of Document objects (e.g., Q&A pairs) to be indexed.
-
-    Returns:
-        VectorStoreIndex: A vector index built from the documents using the multilingual embedding model.
-    """
-    embed_model = HuggingFaceEmbedding(model_name="jhgan/ko-sbert-nli")
-    index = VectorStoreIndex.from_documents(documents, embed_model=embed_model)
-    
-    return index
