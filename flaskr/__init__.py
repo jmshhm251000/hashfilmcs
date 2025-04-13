@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
-from .chatbot import Chatbot
+from .chatbot.chatbot import Chatbot
 from .mongodb import mongo
 from .config import load_app_config
 

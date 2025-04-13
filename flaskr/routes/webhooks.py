@@ -1,8 +1,7 @@
 import logging
 from flask import Blueprint, current_app, request, abort
-from pythonjsonlogger import jsonlogger
 
-# Set up a logger for this module with JSON formatting
+# Set up a logger for this module using a plain text formatter
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -10,8 +9,8 @@ logger.setLevel(logging.INFO)
 file_handler = logging.FileHandler("webhook.log")
 file_handler.setLevel(logging.INFO)
 
-# Create a JSON formatter; adjust fields as desired
-formatter = jsonlogger.JsonFormatter('%(asctime)s %(name)s %(levelname)s %(message)s')
+# Create a logging format: timestamp - name - level - message
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter)
 
 # Add the file handler to the logger
@@ -29,38 +28,27 @@ def webhook():
         token = request.args.get('hub.verify_token')
         challenge = request.args.get('hub.challenge')
         
-        # Log the GET request as a JSON message
-        logger.info({
-            "event": "GET webhook verification request",
-            "mode": mode,
-            "token": token,
-            "challenge": challenge,
-            "remote_addr": request.remote_addr,
-            "url": request.url,
-            "extra_field": request.args.get('field')
-        })
+        # Log the GET request using a formatted string
+        logger.info(
+            "GET webhook verification request: mode=%s, token=%s, challenge=%s, remote_addr=%s, url=%s, extra_field=%s",
+            mode, token, challenge, request.remote_addr, request.url, request.args.get('field')
+        )
         
         if mode == 'subscribe' and token == VERIFY_TOKEN:
-            logger.info({"event": "Webhook verified successfully"})
+            logger.info("Webhook verified successfully")
             return challenge, 200
         else:
-            logger.warning({
-                "event": "Verification token mismatch",
-                "mode": mode,
-                "token": token,
-                "remote_addr": request.remote_addr
-            })
+            logger.warning(
+                "Verification token mismatch: mode=%s, token=%s, remote_addr=%s",
+                mode, token, request.remote_addr
+            )
             return 'Verification token mismatch', 403
 
     elif request.method == 'POST':
         data = request.get_json()
-        # Log POST request details in JSON format
-        logger.info({
-            "event": "POST webhook event received",
-            "method": request.method,
-            "url": request.url,
-            "remote_addr": request.remote_addr,
-            "headers": dict(request.headers),
-            "data": data
-        })
+        # Log POST request details using string formatting
+        logger.info(
+            "POST webhook event received: method=%s, url=%s, remote_addr=%s, headers=%s, data=%s",
+            request.method, request.url, request.remote_addr, dict(request.headers), data
+        )
         return 'EVENT_RECEIVED', 200
