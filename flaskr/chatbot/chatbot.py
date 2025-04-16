@@ -75,7 +75,6 @@ class Chatbot(BaseQueryEngine):
         return final_response
 
 
-
     async def _aquery(self, query_bundle: QueryBundle) -> Any:
         return self._query(query_bundle.query_str)
 
