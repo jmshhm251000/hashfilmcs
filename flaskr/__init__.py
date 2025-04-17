@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request, redirect, session
-from .chatbot import Chatbot
+from .chatbot.chatbot import Chatbot
 from .mongodb import mongo
 from .config import load_app_config
+from .log import LOGGING, logging
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     # 🔧 Load env + config
+    logging.config.dictConfig(LOGGING)
     load_app_config(app, test_config)
 
     # 🔌 Init DB
